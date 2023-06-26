@@ -7,7 +7,7 @@
                     <div>
                         班级名：
                         <el-input
-                            placeholder="班级"
+                            placeholder="所有"
                             v-model="input1"
                             style="width: 300px;"
                         >

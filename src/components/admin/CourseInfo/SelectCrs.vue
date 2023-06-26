@@ -4,7 +4,31 @@
             <el-container>
                 <el-container>
                     <el-main>
-                    
+                    <div>
+                        学期
+                        <el-select v-model="value" placeholder="请选择">
+                            <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                            </el-option>
+                        </el-select>
+                        
+                        考核方式
+                        <el-radio v-model="radio" label="">所有</el-radio>
+                        <el-radio v-model="radio" label="考试">考试</el-radio>
+                        <el-radio v-model="radio" label="考察">考察</el-radio>
+                        <br>
+                        教师：
+                        <el-input
+                            placeholder="所有"
+                            v-model="input1"
+                            style="width: 300px;"
+                        >
+                        </el-input>
+                        <el-button type="primary" @click="fetchData()">查询</el-button>
+                    </div>
                     <el-table
                         :data="currentPageData"
                         style="width: 100%"
@@ -18,7 +42,7 @@
                         <el-table-column
                         prop="Cname"
                         label="课程名称"
-                        width="120">
+                        width="200">
                         </el-table-column>
                         <el-table-column
                         prop="Cterm"
@@ -70,6 +94,27 @@ export default {
         tableData: [],
         currentPage: 1,
         pageSize: 10,
+        radio: '',
+        options: [{
+            value: '所有',
+            label: '所有'
+            }, {
+            value: '2021上',
+            label: '2021上'
+            }, {
+            value: '2021下',
+            label: '2021下'
+            }, {
+            value: '2022上',
+            label: '2022上'
+            }, {
+            value: '2022下',
+            label: '2022下'
+            }],
+        value: '所有',
+        input1: ''
+        
+
         };
     },
     created(){
@@ -93,8 +138,12 @@ export default {
             this.currentPage = currentPage;
         },
         fetchData() {
-
-            axios.get('/admin/courseInfo')
+            const params = {
+                Tname: this.input1,
+                Castmd: this.radio,
+                Cterm: this.value
+            };
+            axios.post('/admin/courseInfo',params)
                 .then(response => {
                     const data = response.data;
                     this.tableData = data;

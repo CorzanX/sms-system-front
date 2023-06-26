@@ -4,7 +4,16 @@
             <el-container>
                 <el-container>
                     <el-main>
-                    
+                    <div>
+                        所属专业：
+                        <el-input
+                            placeholder="所有"
+                            v-model="input1"
+                            style="width: 300px;"
+                        >
+                        </el-input>
+                        <el-button type="primary" @click="fetchData()">查询</el-button>
+                    </div>
                     <el-table
                         :data="currentPageData"
                         style="width: 100%"
@@ -56,6 +65,7 @@ export default {
         tableData: [],
         currentPage: 1,
         pageSize: 10,
+        input1: ''
         };
     },
     created(){
@@ -80,11 +90,11 @@ export default {
         },
         fetchData() {
             const params = {
-                Clsname: this.input1
+                Mname: this.input1
                 
             };
 
-            axios.get('/admin/classInfo', params)
+            axios.post('/admin/classInfo', params)
                 .then(response => {
                     const data = response.data;
                     this.tableData = data;

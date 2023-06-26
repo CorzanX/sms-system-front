@@ -4,7 +4,28 @@
             <el-container>
                 <el-container>
                     <el-main>
-                    
+                    <div>
+                        学号：
+                        <el-input
+                            placeholder="所有"
+                            v-model="input1"
+                            style="width: 300px;"
+                        >
+                        </el-input>
+                        课程号：
+                        <el-input
+                            placeholder="所有"
+                            v-model="input2"
+                            style="width: 300px;"
+                        >
+                        </el-input>
+                        <br>
+                        排序方式
+                            <el-radio v-model="radio" label="无">无</el-radio>
+                            <el-radio v-model="radio" label="降序">降序</el-radio>
+                            <el-radio v-model="radio" label="升序">升序</el-radio>
+                        <el-button type="primary" @click="fetchData()">查询</el-button>
+                    </div>
                     <el-table
                         :data="currentPageData"
                         style="width: 100%"
@@ -66,6 +87,9 @@ export default {
         tableData: [],
         currentPage: 1,
         pageSize: 10,
+        radio: '无',
+        input1: '',
+        input2: ''
         };
     },
     created(){
@@ -89,8 +113,12 @@ export default {
             this.currentPage = currentPage;
         },
         fetchData() {
-
-            axios.post('/admin/reportInfo')
+            const params = {
+                Sno: this.input1,
+                sort: this.radio,
+                Cno: this.input2
+            };
+            axios.post('/admin/reportInfo',params)
                 .then(response => {
                     const data = response.data;
                     this.tableData = data;

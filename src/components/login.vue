@@ -30,6 +30,10 @@
           />
         </a-input-password>
       </a-form-model-item>
+      <a-form-model-item prop="code" class="identify">
+        <a-input v-model="formData.code" placeholder="请输入验证码" />
+        <Identify :identifyCode="identifyCode" @click="refreshCode" />
+      </a-form-model-item>
       <a-form-model-item prop="identity">
         <a-radio-group v-model="formData.identity" class="identity">
           <a-radio value="student">学生</a-radio>
@@ -52,27 +56,48 @@
 </template>
 
 <script>
+import Identify from './identify.vue'
 import axios from 'axios';
 import { message } from 'ant-design-vue';
 import { mapMutations } from "vuex"
 
 export default {
+  components:{
+    Identify
+  },
   data() {
+     var validateCode = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('验证码为空'))
+        return false
+      } else if (value !== this.identifyCode) {
+        callback(new Error('验证码不正确'))
+        return false
+      } else {
+        callback()
+      }
+    }
     return {
       loading: false,
+      identifyCodes: '1234567890',
+      identifyCode: '',
       formData: {
         account: '',
         password: '',
+        code: '',
         identity: 'student',
       },
       rules: {
         account: { required: true, message: '请输入学号/工号！' },
         password: { required: true, message: '请输入密码！' },
+        code: [{ validator: validateCode, trigger: 'blur' }]
       },
     };
   },
   mounted() {
-    
+    this.identifyCode = ''
+    this.makeCode(this.identifyCodes, 4)
+
   },
   methods: {
     ...mapMutations(["user_login"]),
@@ -104,6 +129,22 @@ export default {
           message.warning('请输入有效的账号和密码');
         }
       });
+    },
+    resetForm() {
+      this.$refs.ruleForm.resetFields()
+    },
+    // 验证码相关
+    randomNum(min, max) {
+      return Math.floor(Math.random() * (max - min) + min)
+    },
+    refreshCode() {
+      this.identifyCode = ''
+      this.makeCode(this.identifyCodes, 4)
+    },
+    makeCode(o, l) {
+      for (let i = 0; i < l; i++) {
+        this.identifyCode += this.identifyCodes[this.randomNum(0, this.identifyCodes.length)]
+      }
     }
   }
 };

@@ -87,6 +87,7 @@ export default {
                     const data = response.data;
                     this.Tno = data[0].Tno;
                     this.Tname = data[0].Tname;
+                    this.Tage = data[0].Tage;
                     this.Tsex = data[0].Tsex;
                     this.Tjobtitle = data[0].Tjobtitle;
                     this.Tphone = data[0].Tphone;

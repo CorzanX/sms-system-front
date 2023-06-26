@@ -4,7 +4,16 @@
             <el-container>
                 <el-container>
                     <el-main>
-                    
+                    <div>
+                        职称：
+                        <el-input
+                            placeholder="所有"
+                            v-model="input1"
+                            style="width: 300px;"
+                        >
+                        </el-input>
+                        <el-button type="primary" @click="fetchData()">查询</el-button>
+                    </div>
                     <el-table
                         :data="currentPageData"
                         style="width: 100%"
@@ -32,12 +41,12 @@
                         </el-table-column>
                         <el-table-column
                         prop="Tjobtitle"
-                        label="籍贯"
+                        label="职称"
                         width="120">
                         </el-table-column>
                         <el-table-column
                         prop="Tphone"
-                        label="已修学分"
+                        label="联系电话"
                         width="120">
                         </el-table-column>
                         <el-table-column
@@ -70,6 +79,7 @@ export default {
         tableData: [],
         currentPage: 1,
         pageSize: 10,
+        input1: ''
         };
     },
     created(){
@@ -93,8 +103,10 @@ export default {
             this.currentPage = currentPage;
         },
         fetchData() {
-
-            axios.get('/admin/teacherInfo')
+            const params = {
+                Tjobtitle: this.input1
+            };
+            axios.post('/admin/teacherInfo',params)
                 .then(response => {
                     const data = response.data;
                     this.tableData = data;

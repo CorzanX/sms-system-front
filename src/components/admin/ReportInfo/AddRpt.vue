@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="form-row">
-        <h1>添加学生信息</h1>
+        <h1>添加学生成绩信息</h1>
         学号
         <el-input
             placeholder="202103340306"
